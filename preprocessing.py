@@ -184,13 +184,27 @@ if oheBool == True:
     #pandasdf["JobFamily"] = (pandasdf["JobFamily"].astype("category")).cat.codes
     pandasdf["JobCode"] = (pandasdf["JobCode"].astype("category")).cat.codes
 
-    ohearray = pd.DataFrame(ohe.fit_transform(pandasdf[[#"creation month", #"ReqStatus",
-            "HiringManagerId", "CostCenter", "City",
-            "Country", "JobCode"]]).toarray())
+    ohearray = pd.DataFrame(ohe.fit_transform(pandasdf[[
+        #"creation month",
+        #"ReqStatus",
+        "HiringManagerId",
+        "CostCenter",
+        "City",
+        "Country",
+        "JobCode"]]).toarray())
     pandasdf = pandasdf.join(ohearray)
-    pandasdf = pandasdf.drop(["creation month", #"start month", #"ReqStatus",
-            "HiringManagerName", "NbofReqs", "HiringManagerId", "CostCenter", "City",
-            "Country", "JobCode"], axis=1)
+    pandasdf = pandasdf.drop([
+        "creation month",
+        #"start month",
+        #"ReqStatus",
+        "HiringManagerName",
+        "NbofReqs",
+        "HiringManagerId",
+        "CostCenter",
+        "City",
+        "Country",
+        "JobCode"],
+        axis=1)
 
 if runTimeBool == True:
     checkpoint = round(time.time()-start, 2)
@@ -224,11 +238,27 @@ if runTimeBool == True:
     checkpoint = round(time.time()-start, 2)
     print(f"Age Calculation Runtime {checkpoint}")
 
-xaxis = pandasdf.drop(["start month", "creation year",
-    "Age", "JobFamily", "AgeGroups", "StartDate", "start year", "REQApprovalDate", "ReqStatus"], axis=1)
+xaxis = pandasdf.drop(["start month",
+                       "creation year",
+                       "Age",
+                       "JobFamily",
+                       "AgeGroups",
+                       "StartDate",
+                       "start year",
+                       "REQApprovalDate",
+                       "ReqStatus"],
+                      axis=1)
 yaxis = pandasdf["AgeGroups"]
-xtest = testData.drop(["start month", "creation year",
-    "Age", "JobFamily", "AgeGroups", "StartDate", "start year", "REQApprovalDate", "ReqStatus"], axis=1)
+xtest = testData.drop(["start month",
+                       "creation year",
+                       "Age",
+                       "JobFamily",
+                       "AgeGroups",
+                       "StartDate",
+                       "start year",
+                       "REQApprovalDate",
+                       "ReqStatus"],
+                      axis=1)
 ytest = testData["AgeGroups"]
 
 if oheBool == True:
