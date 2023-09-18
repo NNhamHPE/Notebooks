@@ -1,4 +1,4 @@
-Feel free to contact me: <br>
+Feel free to contact me if you have qny questions: <br>
 Phone: (916)-316-6268 <br>
 School Email: nsnham@ucsc.edu <br>
 Personal Email: 8nham8@gmail.com
