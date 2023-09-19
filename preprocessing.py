@@ -11,7 +11,7 @@ import io
 from sklearn.preprocessing import OneHotEncoder
 import math
 
-runTimeBool = True
+runTimeBool = False
 
 if runTimeBool == True:
     checkpoint = round(time.time()-start, 2)
@@ -28,7 +28,6 @@ if getDataFromSQL == True:
 
     dbconnection = f"mssql://{username}:{password}@{server}/{db}?driver={driver}"
     engine = sqla.create_engine(dbconnection)
-    connection = engine.connect()
 
     sqltopandasdf = pd.read_sql("SELECT	R.ReqMasterId, R.EMPType, R.ReqStatus, R.NbofReqs, R.HiringManagerName, R.HiringManagerId, \
     R.REQApprovalDate, R.CostCenter, R.City, R.Country, R.JobFamily, R.JobCode, \
@@ -166,9 +165,9 @@ if removeReqMasterId == True:
     reqMasterIDList  = pandasdf["ReqMasterId"].tolist()
     pandasdf.drop("ReqMasterId", axis=1)
 
-bookmarkdf = pandasdf.drop(pandasdf[pandasdf["ReqStatus"]=="Open"].index)
-bookmarkdf = bookmarkdf.drop(bookmarkdf[bookmarkdf["ReqStatus"]=="Frozen"].index)
-bookmarkdf = bookmarkdf.drop(bookmarkdf[bookmarkdf["ReqStatus"]=="In_Progress"].index)
+#bookmarkdf = pandasdf.drop(pandasdf[pandasdf["ReqStatus"]=="Open"].index)
+#bookmarkdf = bookmarkdf.drop(bookmarkdf[bookmarkdf["ReqStatus"]=="Frozen"].index)
+#bookmarkdf = bookmarkdf.drop(bookmarkdf[bookmarkdf["ReqStatus"]=="In_Progress"].index)
 
 oheBool = True
 if oheBool == True:
@@ -192,7 +191,9 @@ if oheBool == True:
         "City",
         "Country",
         "JobCode"]]).toarray())
+    
     pandasdf = pandasdf.join(ohearray)
+    
     pandasdf = pandasdf.drop([
         "creation month",
         #"start month",
@@ -248,7 +249,9 @@ xaxis = pandasdf.drop(["start month",
                        "REQApprovalDate",
                        "ReqStatus"],
                       axis=1)
+
 yaxis = pandasdf["AgeGroups"]
+
 xtest = testData.drop(["start month",
                        "creation year",
                        "Age",
@@ -259,6 +262,7 @@ xtest = testData.drop(["start month",
                        "REQApprovalDate",
                        "ReqStatus"],
                       axis=1)
+
 ytest = testData["AgeGroups"]
 
 if oheBool == True:
@@ -267,7 +271,7 @@ if oheBool == True:
 
 exportAxisAndTest = True
 if exportAxisAndTest == True:
-    bookmarkdf.to_csv("bookmarked.csv", index=False, encoding="utf-8")
+    #bookmarkdf.to_csv("bookmarked.csv", index=False, encoding="utf-8")
     xaxis.to_csv("xaxis.csv", index=False, encoding="utf-8")
     xtest.to_csv("xtest.csv", index=False, encoding="utf-8")
     yaxis.to_csv("yaxis.csv", index=False, encoding="utf-8")
