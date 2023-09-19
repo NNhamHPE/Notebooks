@@ -14,7 +14,7 @@ if option == 0:
     model = DecisionTreeClassifier(random_state = 8)
     model.fit(xaxis, yaxis)
 if option == 1:
-    model = joblib.load("xgbmodel.txt")
+    model = model
 if option == 2:
     model = XGBClassifier()
     model.fit(xaxis, yaxis)
