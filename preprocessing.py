@@ -17,12 +17,12 @@ if runTimeBool == True:
     checkpoint = round(time.time()-start, 2)
     print(f"Module import runtime: {checkpoint}")
 
-getDataFromSQL = True
+getDataFromSQL = False
 if getDataFromSQL == True:
     
-    server = "hpeanneops.rose.rdlabs.hpecorp.net"
-    username = "ops_aruba_writer"
-    password = "W0nderfu1Pa55w0rd"
+    server = ""
+    username = ""
+    password = ""
     db = "NEO"
     driver = "ODBC Driver 17 for SQL Server"
 
@@ -101,8 +101,12 @@ if getDataFromSQL == True:
     pandasdf["REQApprovalDate"] = pd.to_datetime(pandasdf["REQApprovalDate"], format="%Y-%m-%d")
     pandasdf["StartDate"] = pd.to_datetime(pandasdf["StartDate"], format="%Y-%m-%d")
 else:
-    pandasdf["REQApprovalDate"] = pd.to_datetime(pandasdf["REQApprovalDate"], format="%m/%d/%Y")
-    pandasdf["StartDate"] = pd.to_datetime(pandasdf["StartDate"], format="%m/%d/%Y")
+    try:
+        pandasdf["REQApprovalDate"] = pd.to_datetime(pandasdf["REQApprovalDate"], format="%m/%d/%Y")
+        pandasdf["StartDate"] = pd.to_datetime(pandasdf["StartDate"], format="%m/%d/%Y")
+    except:
+        pandasdf["REQApprovalDate"] = pd.to_datetime(pandasdf["REQApprovalDate"], format="%Y-%m-%d")
+        pandasdf["StartDate"] = pd.to_datetime(pandasdf["StartDate"], format="%Y-%m-%d")
 
 ununiqueCols = [x for x in pandasdf.columns if pandasdf[x].nunique()==1]
 pandasdf.drop(ununiqueCols, axis=1, inplace=True)
@@ -178,7 +182,7 @@ if oheBool == True:
     pandasdf["creation month"] = (pandasdf["creation month"].astype("category")).cat.codes
     pandasdf["HiringManagerId"] = (pandasdf["HiringManagerId"].astype("category")).cat.codes
     pandasdf["CostCenter"] = (pandasdf["CostCenter"].astype("category")).cat.codes
-    pandasdf["City"] = (pandasdf["City"].astype("category")).cat.codes
+    #pandasdf["City"] = (pandasdf["City"].astype("category")).cat.codes
     pandasdf["Country"] = (pandasdf["Country"].astype("category")).cat.codes
     #pandasdf["JobFamily"] = (pandasdf["JobFamily"].astype("category")).cat.codes
     pandasdf["JobCode"] = (pandasdf["JobCode"].astype("category")).cat.codes
@@ -188,7 +192,7 @@ if oheBool == True:
         #"ReqStatus",
         "HiringManagerId",
         "CostCenter",
-        "City",
+        #"City",
         "Country",
         "JobCode"]]).toarray())
     
@@ -223,6 +227,12 @@ for index, row in pandasdf.iterrows():
 pandasdf.insert(pandasdf.shape[1], "Age", ageList)
 pandasdf = pandasdf.dropna(axis=0, subset=["StartDate"])
 pandasdf = pandasdf.reset_index(drop=True)
+
+predictTest = True
+if predictTest == True:
+    predictNum = 25
+    testData = pandasdf.loc[pandasdf.shape[0]-predictNum:pandasdf.shape[0]]
+    pandasdf = pandasdf.drop(pandasdf.tail(predictNum).index)
 
 bucketList = []
 if pandasdf["Age"].max() > testData["Age"].max():

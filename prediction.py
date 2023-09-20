@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 from xgboost.sklearn import XGBClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import RandomizedSearchCV, GridSearchCV
 model = joblib.load("tuned decision tree.pkl")
 xaxis = pd.read_csv("xaxis.csv")
 yaxis = pd.read_csv("yaxis.csv")
